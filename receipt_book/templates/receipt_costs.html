@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %} 
+{% load widget_tweaks %}
+
+<!-- 
+{% for product in products %}
+    <p>{{ product.name }}: ${{ product.get_total_cost }}</p>
+{% endfor %}
+-->
+
+{% block receipts %}
+<div class="container-flex text-center justify-content-center align-items-center" style="padding-top: 10px; padding-bottom: 20px; margin-top: 10px; vertical-align:middle;">
+    <div class="row" style="margin-top: 10px;">
+        <!-- Bloque col-md-4 -->
+        <div class="col-md-4 text-light" style="background: #4B088A">
+            <h4>Entrada de Productos</h4>
+            <div class="container" style="overflow-y: auto; height: 600px; background: #CEECF5">
+                <!-- Formulario o contenido del col-md-4 -->
+                <div class="row">
+                        <div class="container" style="overflow-y: auto; height: 600px; background: #CEECF5">
+                            <form class="d-flex" action="#" method="POST">
+                                {% csrf_token %}
+                                <table class="table" style="margin-top: 20px;">
+                                    <tr>
+                                        <td style="text-align: left; vertical-align: middle; padding-left: 15px;">Nombre Producto</td>
+                                        <td>{% render_field form.name %}</td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: left; vertical-align: middle; padding-left: 15px;">Descripción</td>
+                                        <td>{% render_field form.description %}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: left; vertical-align: middle; padding-left: 15px;">Rendimiento</td>
+                                        <td>{% render_field form.yield_quantity %}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: left; vertical-align: middle; padding-left: 15px;">
+                                            <button class="btn btn-primary" type="submit">Guardar</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bloque col-md-8 -->
+        <div class="col-md-8">
+            <h4>Productos Registrados</h4>
+            <nav class="navbar bg-body-light" style="padding-top: 20px; padding-bottom: 20px;">
+                <div class="container-fluid justify-content-center align-items-center">
+                    <form class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
+                        <button class="btn btn-outline-primary" type="submit">Buscar</button>
+                    </form>
+                    
+                </div>
+                
+            </nav>
+            <div class="row" style="margin-top: 20px;">
+            <p>{{ products|length }} productos registrados.</p>
+            </div>
+
+            <div class="btn-group" role="group" aria-label="Acciones">
+                <p><a href="{% url 'download_products_with_ingredients' %}?format=excel" class="btn btn-primary me-1">Descargar Recetario</a></p>
+                <p><a href="{% url 'download_product_data_excel' %}" class="btn btn-primary">Descargar Data (productos)</a></p>
+            </div>
+        
+
+            <div class="container table-responsive" style="overflow-y: auto; height: 500px;">
+                <table class="table table-hover table-striped table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Producto</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Rendimiento</th>
+                            <th scope="col">Costo Total</th>
+                            <th scope="col">Costo/Unidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in products %}
+                            <tr>
+                                <td>{{ p.id }}</td>
+                                <td><a href="{% url 'product_detail' p.id %}" class="btn btn-success">{{ p.name }}</a></td>
+                                <td>{{ p.description }}</td>
+                                <td>{{ p.yield_quantity }}</td>
+                                <!-- <td>{{ p.get_total_cost }}</td> -->
+                                <td>{{ p.get_total_ingredient_cost }}</td>
+                                <td>{{ p.get_cost_per_unit }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+
+
+    
+
+{% endblock receipts %}

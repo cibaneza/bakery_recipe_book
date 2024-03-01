@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block detail_products %}
+    
+<div class="container-flex text-center justify-content-center align-items-center" style="padding-top: 10px; padding-bottom: 20px; margin-top: 10px; vertical-align:middle;">
+    <div class="row justify-content-center align-middle" style="margin-top: 10px; height:60px;">
+        <div class="col-md-8">
+            <h4>Recetario</h4>
+            <h4 class="text-info">{{ product.name }}</h4>
+        </div>
+        
+    </div>
+
+    <div class="row">
+        <nav class="navbar bg-body-light" style="padding-top: 20px; padding-bottom: 20px;">
+            <div class="container-fluid justify-content-center align-items-center">
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="S">
+                    <button class="btn btn-outline-primary" type="submit">Buscar</button>
+                </form>
+            </div>
+        </nav>
+    </div>
+    
+    <div class="row" style="margin-top: 20px;">
+        <p>{{ product_ingredients|length }} Ingrediente(s) registrados para {{ product.name }}.</p>
+        
+        <p><button class="btn btn-success me-1" id="addIngredientBtn" data-toggle="modal" data-target="#addIngredientModal" >Añadir Ingrediente</button></p>
+        
+    </div>
+
+    <div class="container-fluid justify-content-center align-items-center">
+        <div class="row justify-content-center align-middle" style="margin-top: 10px; height:60px;">
+            <div class="col-md-8">
+                <div class="row" style="margin-top: 20px">
+        
+                    <div class="container table-responsive" style="overflow-y: auto; height: 500px;">
+                        <table class="table table-hover table-striped table-bordered">
+                            <thead class="thead-light">
+                                <tr>
+                                    <td>Id</td>
+                                    <td>Ingrediente</td>
+                                    <td>Descripción</td>
+                                    <td>Cantidad</td>
+                                    <td>Unidad</td>
+                                    <td>Costo Total x Cantidad Agregada</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for pi in product_ingredients %}
+                                    <tr data-productingredient-id="{{ pi.id }}">
+                                        <td>{{ pi.id }}</td>
+                                        <td>{{ pi.ingredient.name }}</td>
+                                        <td>{{ pi.ingredient.description }}</td>
+                                        <td>{{ pi.quantity }}</td>
+                                        <td>{{ pi.unit }}</td>
+                                        <td>{{ pi.cost }}</td>
+                                        <td>
+                                            <div class="btn-group" role="group" aria-label="Acciones">
+                                                
+                                                <button class="btn btn-info me-1 edit-btn" data-productingredient-id="{{ pi.id }}">Editar</button>
+                                                <button class="btn btn-danger delete-btn" data-productingredient-id="{{ pi.id }}">Eliminar</button>
+                                            </div>
+                                        </td>
+                                        
+                                        
+                                    </tr>
+    
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Modal Editar Ingrediente -->
+<div class="modal fade" id="editIngredientModal" tabindex="-1" aria-labelledby="editIngredientModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editIngredientModalLabel">Editar Ingrediente</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="editIngredientForm">
+            <input type="hidden" id="ingredientId">
+            <div class="form-group">
+              <label for="ingredientQuantity">Cantidad</label>
+              <input type="number" class="form-control" id="ingredientQuantity" required>
+            </div>
+            <div class="form-group">
+              <label for="ingredientCost">Costo Total x Cantidad Agregada</label>
+              <input type="text" class="form-control" id="ingredientCost" required>
+            </div>
+            <div class="form-group">
+              <label for="ingredientUnitSelect">Unidad</label>
+            <select class="form-control" id="ingredientUnitSelect">
+              <!-- Las opciones se deben cargar dinámicamente con JS o directamente desde el backend -->
+            </select>
+            </div>
+          </form>
+          <p class="py-2">ID producto: {{ product.id }} & Producto: <span class="text-info">{{ product.name }}<span/></p>
+        </div>
+       
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" id="saveChanges">Guardar Cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<!-- Modal Agregar Ingrediente -->
+<div class="modal fade" id="addIngredientModal" tabindex="-1" role="dialog" aria-labelledby="addIngredientModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addIngredientModalLabel">Agregar Ingrediente</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Seleccionar ingrediente -->
+          <div class="form-group">
+            <label for="ingredientSelect">Ingrediente</label>
+            <select class="form-control" id="ingredientSelect">
+              <!-- Las opciones se deben cargar dinámicamente con JS o directamente desde el backend -->
+            </select>
+          </div>
+        
+        <!-- 
+            Cantidad 
+        <div class="form-group">
+            <label for="ingredientQuantity">Cantidad</label>
+        <input type="number" class="form-control" id="ingredientQuantity" placeholder="Ingresa la cantidad">
+        </div>
+         Costo 
+        <div class="form-group">
+            <label for="ingredientCost">Costo</label>
+            <input type="text" class="form-control" id="ingredientCost" placeholder="Ingresa el costo">
+        </div>
+        -->
+          <!-- ID del producto (oculto si no se necesita mostrar) -->
+          <p class="py-2">ID producto: {{ product.id }}</p>
+          <input type="hidden" id="productId" value="{{ product.id }}">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" id="saveIngredientBtn">Agregar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+
+{% endblock detail_products %}

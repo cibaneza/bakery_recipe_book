@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %} 
+{% load widget_tweaks %}
+
+<!-- 
+{% for product in products %}
+    <p>{{ product.name }}: ${{ product.get_total_cost }}</p>
+{% endfor %}
+-->
+
+{% block receipts %}
+<div class="container-flex text-center justify-content-center align-items-center" style="padding-top: 10px; padding-bottom: 20px; margin-top: 10px; vertical-align:middle;">
+    <div class="row" style="margin-top: 10px;">
+        <!-- Bloque col-md-4 -->
+        <div class="col-md-4 text-light" style="background: #4B088A">
+            <h4>Entrada de Ingredientes</h4>
+            <div class="container" style="overflow-y: auto; height: 600px; background: #CEECF5">
+                <!-- Formulario o contenido del col-md-4 -->
+                <div class="row">
+                        <div class="container" style="overflow-y: auto; height: 600px; background: #CEECF5">
+                            <form class="d-flex" action="#" method="POST">
+                                {% csrf_token %}
+                                <table class="table" style="margin-top: 20px;">
+                                    <tr>
+                                        <td style="text-align: left; vertical-align: middle; padding-left: 15px;">Nombre Ingrediente</td>
+                                        <td>{% render_field form.name %}</td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: left; vertical-align: middle; padding-left: 15px;">Descripción</td>
+                                        <td>{% render_field form.description %}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: left; vertical-align: middle; padding-left: 15px;">
+                                            <button class="btn btn-primary" type="submit">Guardar</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bloque col-md-8 -->
+        <div class="col-md-8">
+            <h4>Ingredientes Registrados</h4>
+            <nav class="navbar bg-body-light" style="padding-top: 20px; padding-bottom: 20px;">
+                <div class="container-fluid justify-content-center align-items-center">
+                    <form class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
+                        <button class="btn btn-outline-primary" type="submit">Buscar</button>
+                    </form>
+                </div>
+            </nav>
+
+            <div class="row" style="margin-top: 20px;">
+              <p>{{ ingredients|length }} ingredientes registrados.</p>
+              <p><a href="{% url 'download_ingredients_data_excel' %}" class="btn btn-primary">Descargar Data (ingredientes)</a></p>
+              </div>
+            
+            
+            <div class="container table-responsive" style="overflow-y: auto; height: 500px;">
+                <table class="table table-hover table-striped table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Ingrediente</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Fecha de Creación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in ingredients %}
+                            <tr>
+                                <td>{{ i.id }}</td>
+                                <td>{{ i.name }}</td>
+                                <td>{{ i.description }}</td>
+                                <td>{{ i.date }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+
+
+    
+
+{% endblock receipts %}
