@@ -31,6 +31,34 @@ class Product(models.Model):
             cost_per_unit = total_cost / self.yield_quantity
             return round(cost_per_unit, 4)
         return 0
+    
+    def costo_plus_iva_unit(self):
+        total_cost_unit = float(self.get_cost_per_unit())
+        costo_plus_iva = total_cost_unit * 1.19
+        if total_cost_unit is not None:
+            return round(costo_plus_iva, 4)
+        return 0
+    
+    def venta_50(self):
+        total_cost_iva = self.costo_plus_iva_unit()
+        venta_50 = total_cost_iva * 1.5
+        if total_cost_iva is not None: 
+            return round(venta_50, 4)
+        return 0
+    
+    def venta_70(self):
+        total_cost_iva = self.costo_plus_iva_unit()
+        venta_70 = total_cost_iva * 1.7
+        if total_cost_iva is not None: 
+            return round(venta_70, 4)
+        return 0
+    
+    def venta_100(self):
+        total_cost_iva = self.costo_plus_iva_unit()
+        venta_100 = total_cost_iva * 2
+        if total_cost_iva is not None: 
+            return round(venta_100, 4)
+        return 0
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=255, unique=True, null=False, blank=False)

@@ -69,7 +69,7 @@
             </div>
         
 
-            <div class="container table-responsive" style="overflow-y: auto; height: 500px;">
+            <div class="container table-responsive" style="overflow-x: auto; overflow-y: auto; height: 500px; width: 130vh;">
                 <table class="table table-hover table-striped table-bordered">
                     <thead class="thead-light">
                         <tr>
@@ -79,6 +79,10 @@
                             <th scope="col">Rendimiento</th>
                             <th scope="col">Costo Total</th>
                             <th scope="col">Costo/Unidad</th>
+                            <th scope="col">+IVA</th>
+                            <th scope="col">Venta 50</th>
+                            <th scope="col">Venta 70</th>
+                            <th scope="col">Venta 100</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -91,6 +95,10 @@
                                 <!-- <td>{{ p.get_total_cost }}</td> -->
                                 <td>{{ p.get_total_ingredient_cost }}</td>
                                 <td>{{ p.get_cost_per_unit }}</td>
+                                <td>{{ p.costo_plus_iva_unit }}</td>
+                                <td>{{ p.venta_50 }}</td>
+                                <td>{{ p.venta_70 }}</td>
+                                <td>{{ p.venta_100 }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>

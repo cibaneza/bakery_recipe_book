@@ -16,4 +16,4 @@ urlpatterns = [
     path('download_product_data_excel/', download_product_data_excel, name='download_product_data_excel'),
     path('download_ingredients_data_excel/', download_ingredients_data_excel, name='download_ingredients_data_excel'),
     path('download_products_with_ingredients/', download_products_with_ingredients, name='download_products_with_ingredients'),
-]
+] 
